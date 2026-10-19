@@ -10,8 +10,8 @@ using System.Text;
 
 [assembly: AssemblyTitle("ChatGPT Paste for Word")]
 [assembly: AssemblyProduct("ChatGPT Paste for Word")]
-[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyInformationalVersion("0.1.0-alpha")]
+[assembly: AssemblyVersion("0.1.1.0")]
+[assembly: AssemblyInformationalVersion("0.1.1-alpha")]
 
 internal static class NativeMethods
 {
@@ -57,10 +57,11 @@ internal sealed class ChatGPTPasteWindow : Form
     {
         ShowInTaskbar = false;
         WindowState = FormWindowState.Minimized;
+        Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         var menu = new ContextMenuStrip();
         menu.Items.Add("ChatGPT Paste: Ctrl+Alt+Shift+V");
         menu.Items.Add("Exit", null, (sender, args) => Close());
-        trayIcon = new NotifyIcon { Icon = SystemIcons.Application, Text = "ChatGPT Paste v0.1.0 (Alpha)", Visible = true, ContextMenuStrip = menu };
+        trayIcon = new NotifyIcon { Icon = Icon, Text = "ChatGPT Paste v0.1.1 (Alpha)", Visible = true, ContextMenuStrip = menu };
         if (!NativeMethods.RegisterHotKey(Handle, HotkeyId, ControlAltShift, 0x56))
         {
             trayIcon.Dispose();
@@ -136,7 +137,7 @@ internal sealed class ChatGPTPasteWindow : Form
             string version;
             try { version = Convert.ToString(bridge.Version); }
             catch { throw new InvalidOperationException("This Word window is still using an old ChatGPT Paste add-in. Close every Word window, then reopen Word."); }
-            if (version != "0.1.0") throw new InvalidOperationException("This Word window has ChatGPT Paste " + version + ". Close every Word window, then reopen Word to load version 0.1.0.");
+            if (version != "0.1.1") throw new InvalidOperationException("This Word window has ChatGPT Paste " + version + ". Close every Word window, then reopen Word to load version 0.1.1.");
             Log("Using Word ribbon bridge");
             bridge.QueuePaste();
             return true;

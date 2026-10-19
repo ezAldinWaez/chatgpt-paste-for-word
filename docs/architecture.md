@@ -6,6 +6,8 @@
 
 The Ribbon DLL embeds Office and Extensibility COM types at build time. Build machines need the relevant primary interop assemblies; user machines need desktop Word, not separate interop assemblies. The source is compiled with the .NET Framework C# compiler because the add-in is loaded by Windows desktop Office.
 
+The generated master icon and its Windows/Office exports live under `assets/`. `scripts/prepare-icons.ps1` regenerates the exports using Windows/.NET. The build embeds the multi-resolution ICO in both executables and the transparent 32 pixel PNG in the Ribbon DLL. Both ribbon buttons use the same cached OLE picture through their `getImage` callback. Setup registers the installed executable as the Windows Installed Apps icon.
+
 The converter temporarily changes the clipboard during a paste request. When conversion fails, it aims to leave the original clipboard unchanged. No pasted content is sent to a service. Pandoc is downloaded only during setup when a verified local copy is unavailable.
 
 The installer is unsigned. Maintainers can add Authenticode signing in a future release without changing the source layout.

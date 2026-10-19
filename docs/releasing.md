@@ -1,6 +1,6 @@
 # Releasing
 
-The current release is **v0.1.0 (Alpha)**. Keep alpha releases marked as prereleases on GitHub. `VERSION` uses the numeric version (currently `0.1.0`); assembly informational versions include the `-alpha` suffix, and visible version labels include **Alpha**.
+The current release is **v0.1.1 (Alpha)**. Keep alpha releases marked as prereleases on GitHub. `VERSION` uses the numeric version (currently `0.1.1`); assembly informational versions include the `-alpha` suffix, and visible version labels include **Alpha**.
 
 Release builds need Windows, the 64-bit .NET Framework compiler, and Office/Extensibility primary interop assemblies. See [Microsoft's PIA documentation](https://learn.microsoft.com/en-us/visualstudio/vsto/office-primary-interop-assemblies?view=visualstudio) for development-machine setup. `scripts/build.ps1` accepts explicit `-OfficeAssembly` and `-ExtensibilityAssembly` paths when auto-discovery cannot find them.
 

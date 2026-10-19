@@ -1,12 +1,12 @@
 # ChatGPT Paste for Word
 
-**v0.1.0 — Alpha.** This software is in early development.
+**v0.1.1 — Alpha.** This software is in early development.
 
 An independent Windows utility for copying formatted ChatGPT responses with equations into desktop Microsoft Word. It adds a **ChatGPT Paste** button to Word's **Home** ribbon and a dedicated **ChatGPT Paste** tab. The **Ctrl+Alt+Shift+V** shortcut also remains available. It is not an official OpenAI or Microsoft product.
 
 ## Install
 
-1. Double-click `ChatGPT-Paste-for-Word-Setup-0.1.0.exe`.
+1. Double-click `ChatGPT-Paste-for-Word-Setup-0.1.1.exe`.
 2. Click **Install**. No administrator access is needed.
 3. On a first install, setup downloads the official Pandoc 3.9.0.2 Windows release (~41 MB), checks its SHA-256 hash, and installs to your user profile. Updates reuse a verified local copy.
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.1 (Alpha) — 2026-10-19
+
+- Added a custom clipboard/ChatGPT icon to Word's ribbon buttons, the tray utility, setup, and Windows Installed Apps.
+- Preserved full color and transparency in all nine Windows icon sizes, with a PNG frame at 256 pixels.
+- Added icon export tooling and validation to catch malformed icon payloads.
+
 ## v0.1.0 (Alpha) — 2026-10-19
 
 Initial alpha release.

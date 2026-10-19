@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -8,8 +9,8 @@ using Microsoft.Office.Core;
 
 [assembly: System.Reflection.AssemblyTitle("ChatGPT Paste for Word Ribbon")]
 [assembly: System.Reflection.AssemblyProduct("ChatGPT Paste for Word")]
-[assembly: System.Reflection.AssemblyVersion("0.1.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersion("0.1.0-alpha")]
+[assembly: System.Reflection.AssemblyVersion("0.1.1.0")]
+[assembly: System.Reflection.AssemblyInformationalVersion("0.1.1-alpha")]
 
 [ComVisible(true)]
 [Guid("E1379E36-6276-4EAB-8A0E-5A30FD4C91A7")]
@@ -19,8 +20,10 @@ public sealed class ChatGPTPasteRibbon : IDTExtensibility2, IRibbonExtensibility
 {
     private object wordApplication;
     private Control dispatcher;
+    private Bitmap ribbonBitmap;
+    private object ribbonPicture;
 
-    public string Version { get { return "0.1.0"; } }
+    public string Version { get { return "0.1.1"; } }
 
     public void OnConnection(object application, ext_ConnectMode connectMode, object addInInst, ref Array custom)
     {
@@ -31,7 +34,16 @@ public sealed class ChatGPTPasteRibbon : IDTExtensibility2, IRibbonExtensibility
         catch (Exception error) { Log("Could not expose shortcut bridge: " + error.Message); }
     }
 
-    public void OnDisconnection(ext_DisconnectMode removeMode, ref Array custom) { wordApplication = null; if (dispatcher != null) dispatcher.Dispose(); dispatcher = null; }
+    public void OnDisconnection(ext_DisconnectMode removeMode, ref Array custom)
+    {
+        wordApplication = null;
+        if (dispatcher != null) dispatcher.Dispose();
+        dispatcher = null;
+        if (ribbonPicture != null && Marshal.IsComObject(ribbonPicture)) Marshal.ReleaseComObject(ribbonPicture);
+        ribbonPicture = null;
+        if (ribbonBitmap != null) ribbonBitmap.Dispose();
+        ribbonBitmap = null;
+    }
     public void OnAddInsUpdate(ref Array custom) { }
     public void OnStartupComplete(ref Array custom) { }
     public void OnBeginShutdown(ref Array custom) { wordApplication = null; }
@@ -41,12 +53,26 @@ public sealed class ChatGPTPasteRibbon : IDTExtensibility2, IRibbonExtensibility
         return "<customUI xmlns=\"http://schemas.microsoft.com/office/2006/01/customui\">" +
                "<ribbon><tabs>" +
                "<tab idMso=\"TabHome\"><group id=\"ChatGPTPasteHomeGroup\" label=\"ChatGPT\">" +
-               "<button id=\"ChatGPTPasteHomeButton\" label=\"ChatGPT Paste\" size=\"large\" imageMso=\"Paste\" onAction=\"OnPasteClick\" screentip=\"Paste from ChatGPT\" supertip=\"Keep headings, lists, tables, editable equations, and the cursor's font and direction. v0.1.0 (Alpha).\"/>" +
+               "<button id=\"ChatGPTPasteHomeButton\" label=\"ChatGPT Paste\" size=\"large\" getImage=\"GetPasteImage\" onAction=\"OnPasteClick\" screentip=\"Paste from ChatGPT\" supertip=\"Keep headings, lists, tables, editable equations, and the cursor's font and direction. v0.1.1 (Alpha).\"/>" +
                "</group></tab>" +
                "<tab id=\"ChatGPTPasteTab\" label=\"ChatGPT Paste\"><group id=\"ChatGPTPasteTabGroup\" label=\"Paste\">" +
-               "<button id=\"ChatGPTPasteTabButton\" label=\"Paste from ChatGPT\" size=\"large\" imageMso=\"Paste\" onAction=\"OnPasteClick\"/>" +
+               "<button id=\"ChatGPTPasteTabButton\" label=\"Paste from ChatGPT\" size=\"large\" getImage=\"GetPasteImage\" onAction=\"OnPasteClick\"/>" +
                "</group></tab>" +
                "</tabs></ribbon></customUI>";
+    }
+
+    public object GetPasteImage(IRibbonControl control)
+    {
+        if (ribbonPicture == null)
+        {
+            using (Stream stream = GetType().Assembly.GetManifestResourceStream("ChatGPTPasteIcon.png"))
+            {
+                if (stream == null) throw new InvalidOperationException("The ribbon icon is missing. Reinstall ChatGPT Paste for Word.");
+                using (var image = new Bitmap(stream)) ribbonBitmap = new Bitmap(image);
+            }
+            ribbonPicture = RibbonPictureConverter.Convert(ribbonBitmap);
+        }
+        return ribbonPicture;
     }
 
     public void OnPasteClick(IRibbonControl control)
@@ -125,4 +151,11 @@ public sealed class ChatGPTPasteRibbon : IDTExtensibility2, IRibbonExtensibility
         }
         catch { }
     }
+}
+
+// Office's Ribbon callbacks expect an OLE picture rather than a managed bitmap.
+internal sealed class RibbonPictureConverter : AxHost
+{
+    private RibbonPictureConverter() : base("") { }
+    internal static object Convert(Image image) { return GetIPictureDispFromPicture(image); }
 }

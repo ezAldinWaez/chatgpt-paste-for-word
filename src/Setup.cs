@@ -13,8 +13,8 @@ using Microsoft.Win32;
 
 [assembly: AssemblyTitle("ChatGPT Paste for Word Setup")]
 [assembly: AssemblyProduct("ChatGPT Paste for Word")]
-[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyInformationalVersion("0.1.0-alpha")]
+[assembly: AssemblyVersion("0.1.1.0")]
+[assembly: AssemblyInformationalVersion("0.1.1-alpha")]
 
 internal sealed class SetupWindow : Form
 {
@@ -22,8 +22,8 @@ internal sealed class SetupWindow : Form
     private const string InstallFolder = "ChatGPTPasteForWord";
     private const string RibbonProgId = "ChatGPTPasteForWord.Ribbon";
     private const string RibbonClsid = "{E1379E36-6276-4EAB-8A0E-5A30FD4C91A7}";
-    private const string RibbonAssembly = "ChatGPTPasteRibbon-0.1.0.dll";
-    private const string RibbonVersion = "0.1.0.0";
+    private const string RibbonAssembly = "ChatGPTPasteRibbon-0.1.1.dll";
+    private const string RibbonVersion = "0.1.1.0";
     private const string PandocExeSha256 = "E83F8354C0F507222B5684797B9C5AE766F03889785995D14AAC27816EC456BA";
     private const string PandocUrl = "https://github.com/jgm/pandoc/releases/download/3.9.0.2/pandoc-3.9.0.2-windows-x86_64.zip";
     private const string PandocSha256 = "C97542F2800F446E788D9F74237856D995421AD1BB3CC8324286840C5F272D3A";
@@ -34,12 +34,12 @@ internal sealed class SetupWindow : Form
 
     internal SetupWindow()
     {
-        Text = AppName + " Setup v0.1.0 (Alpha)";
+        Text = AppName + " Setup v0.1.1 (Alpha)";
         StartPosition = FormStartPosition.CenterScreen;
         ClientSize = new Size(460, 215);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
-        Icon = SystemIcons.Application;
+        Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
         var title = new Label { Text = AppName, Font = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Bold), Left = 22, Top = 20, Width = 415, Height = 30 };
         var description = new Label { Text = "Adds a ChatGPT Paste button to Word's Home ribbon and a ChatGPT Paste tab. The keyboard shortcut also remains available.", Left = 22, Top = 57, Width = 415, Height = 45 };
@@ -354,9 +354,10 @@ internal sealed class SetupWindow : Form
             using (RegistryKey uninstall = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\ChatGPTPasteForWord"))
             {
                 uninstall.SetValue("DisplayName", AppName + " (unofficial)");
-                uninstall.SetValue("DisplayVersion", "0.1.0");
+                uninstall.SetValue("DisplayVersion", "0.1.1");
                 uninstall.SetValue("Publisher", "Independent utility");
                 uninstall.SetValue("InstallLocation", installDir);
+                uninstall.SetValue("DisplayIcon", "\"" + Path.Combine(installDir, "ChatGPTPasteHotkey.exe") + "\",0");
                 string powershell = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
                 uninstall.SetValue("UninstallString", "\"" + powershell + "\" -NoProfile -ExecutionPolicy Bypass -File \"" + Path.Combine(installDir, "Uninstall.ps1") + "\"");
                 uninstall.SetValue("NoModify", 1, RegistryValueKind.DWord);
