@@ -8,7 +8,8 @@ using Microsoft.Office.Core;
 
 [assembly: System.Reflection.AssemblyTitle("ChatGPT Paste for Word Ribbon")]
 [assembly: System.Reflection.AssemblyProduct("ChatGPT Paste for Word")]
-[assembly: System.Reflection.AssemblyVersion("1.5.9.0")]
+[assembly: System.Reflection.AssemblyVersion("0.1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersion("0.1.0-alpha")]
 
 [ComVisible(true)]
 [Guid("E1379E36-6276-4EAB-8A0E-5A30FD4C91A7")]
@@ -19,7 +20,7 @@ public sealed class ChatGPTPasteRibbon : IDTExtensibility2, IRibbonExtensibility
     private object wordApplication;
     private Control dispatcher;
 
-    public string Version { get { return "1.5.9"; } }
+    public string Version { get { return "0.1.0"; } }
 
     public void OnConnection(object application, ext_ConnectMode connectMode, object addInInst, ref Array custom)
     {
@@ -40,7 +41,7 @@ public sealed class ChatGPTPasteRibbon : IDTExtensibility2, IRibbonExtensibility
         return "<customUI xmlns=\"http://schemas.microsoft.com/office/2006/01/customui\">" +
                "<ribbon><tabs>" +
                "<tab idMso=\"TabHome\"><group id=\"ChatGPTPasteHomeGroup\" label=\"ChatGPT\">" +
-               "<button id=\"ChatGPTPasteHomeButton\" label=\"ChatGPT Paste\" size=\"large\" imageMso=\"Paste\" onAction=\"OnPasteClick\" screentip=\"Paste from ChatGPT\" supertip=\"Keep headings, lists, tables, editable equations, and the cursor's font and direction. Version 1.5.9.\"/>" +
+               "<button id=\"ChatGPTPasteHomeButton\" label=\"ChatGPT Paste\" size=\"large\" imageMso=\"Paste\" onAction=\"OnPasteClick\" screentip=\"Paste from ChatGPT\" supertip=\"Keep headings, lists, tables, editable equations, and the cursor's font and direction. v0.1.0 (Alpha).\"/>" +
                "</group></tab>" +
                "<tab id=\"ChatGPTPasteTab\" label=\"ChatGPT Paste\"><group id=\"ChatGPTPasteTabGroup\" label=\"Paste\">" +
                "<button id=\"ChatGPTPasteTabButton\" label=\"Paste from ChatGPT\" size=\"large\" imageMso=\"Paste\" onAction=\"OnPasteClick\"/>" +

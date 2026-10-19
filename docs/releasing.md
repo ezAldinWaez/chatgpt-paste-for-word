@@ -1,15 +1,17 @@
 # Releasing
 
+The current release is **v0.1.0 (Alpha)**. Keep alpha releases marked as prereleases on GitHub. `VERSION` uses the numeric version (currently `0.1.0`); assembly informational versions include the `-alpha` suffix, and visible version labels include **Alpha**.
+
 Release builds need Windows, the 64-bit .NET Framework compiler, and Office/Extensibility primary interop assemblies. See [Microsoft's PIA documentation](https://learn.microsoft.com/en-us/visualstudio/vsto/office-primary-interop-assemblies?view=visualstudio) for development-machine setup. `scripts/build.ps1` accepts explicit `-OfficeAssembly` and `-ExtensibilityAssembly` paths when auto-discovery cannot find them.
 
-1. Update `VERSION`, matching source version strings, `CHANGELOG.md`, and the supported/tested version statements in `README.md`. Keep the Pandoc URL and both expected hashes in `src/Setup.cs` synchronized when updating Pandoc.
+1. Update `VERSION`, matching source version strings (including assembly informational versions and visible Alpha labels), `CHANGELOG.md`, and the supported/tested version statements in `README.md`. Keep the Pandoc URL and both expected hashes in `src/Setup.cs` synchronized when updating Pandoc.
 2. Run `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-release.ps1`. The command creates `dist/ChatGPT-Paste-for-Word-Setup-VERSION.exe` and `dist/SHA256SUMS.txt`; `dist/` is intentionally ignored by Git.
 3. Complete [testing.md](testing.md) on a clean Windows/Word installation. Check the installer hash with `Get-FileHash -Algorithm SHA256 dist\ChatGPT-Paste-for-Word-Setup-VERSION.exe`.
 4. Commit the source, tag it `vVERSION`, and push the branch and tag to the GitHub repository. Creating a GitHub release publishes the installer to others, so review the final artifacts and release notes first.
 5. With an authenticated GitHub CLI, create a **draft** release and attach the installer, checksum file, README, and license:
 
    ```powershell
-   gh release create vVERSION dist/ChatGPT-Paste-for-Word-Setup-VERSION.exe dist/SHA256SUMS.txt dist/README.md dist/LICENSE --draft --verify-tag --title "ChatGPT Paste for Word vVERSION" --notes-file CHANGELOG.md
+   gh release create vVERSION dist/ChatGPT-Paste-for-Word-Setup-VERSION.exe dist/SHA256SUMS.txt dist/README.md dist/LICENSE --draft --prerelease --verify-tag --title "ChatGPT Paste for Word vVERSION (Alpha)" --notes-file CHANGELOG.md
    ```
 
    Replace `VERSION` with the number in the `VERSION` file. Review the draft on GitHub, then publish it.

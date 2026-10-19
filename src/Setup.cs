@@ -13,7 +13,8 @@ using Microsoft.Win32;
 
 [assembly: AssemblyTitle("ChatGPT Paste for Word Setup")]
 [assembly: AssemblyProduct("ChatGPT Paste for Word")]
-[assembly: AssemblyVersion("1.5.9.0")]
+[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyInformationalVersion("0.1.0-alpha")]
 
 internal sealed class SetupWindow : Form
 {
@@ -21,8 +22,8 @@ internal sealed class SetupWindow : Form
     private const string InstallFolder = "ChatGPTPasteForWord";
     private const string RibbonProgId = "ChatGPTPasteForWord.Ribbon";
     private const string RibbonClsid = "{E1379E36-6276-4EAB-8A0E-5A30FD4C91A7}";
-    private const string RibbonAssembly = "ChatGPTPasteRibbon-1.5.9.dll";
-    private const string RibbonVersion = "1.5.9.0";
+    private const string RibbonAssembly = "ChatGPTPasteRibbon-0.1.0.dll";
+    private const string RibbonVersion = "0.1.0.0";
     private const string PandocExeSha256 = "E83F8354C0F507222B5684797B9C5AE766F03889785995D14AAC27816EC456BA";
     private const string PandocUrl = "https://github.com/jgm/pandoc/releases/download/3.9.0.2/pandoc-3.9.0.2-windows-x86_64.zip";
     private const string PandocSha256 = "C97542F2800F446E788D9F74237856D995421AD1BB3CC8324286840C5F272D3A";
@@ -33,7 +34,7 @@ internal sealed class SetupWindow : Form
 
     internal SetupWindow()
     {
-        Text = AppName + " Setup";
+        Text = AppName + " Setup v0.1.0 (Alpha)";
         StartPosition = FormStartPosition.CenterScreen;
         ClientSize = new Size(460, 215);
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -353,7 +354,7 @@ internal sealed class SetupWindow : Form
             using (RegistryKey uninstall = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\ChatGPTPasteForWord"))
             {
                 uninstall.SetValue("DisplayName", AppName + " (unofficial)");
-                uninstall.SetValue("DisplayVersion", "1.5.9");
+                uninstall.SetValue("DisplayVersion", "0.1.0");
                 uninstall.SetValue("Publisher", "Independent utility");
                 uninstall.SetValue("InstallLocation", installDir);
                 string powershell = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
