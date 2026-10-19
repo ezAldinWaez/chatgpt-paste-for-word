@@ -1,0 +1,17 @@
+name: Validate source
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check versions, installer resources, and PowerShell syntax
+        shell: powershell
+        run: ./scripts/test-source.ps1
